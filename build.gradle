@@ -1,61 +1,54 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'KuiperPublish'
+// apply from: 'KuiperPublish.gradle'
+apply from: 'mavenPublish.gradle'
 
-group = 'com.artifex.mupdf'
-version = '1.18.0'
 
 buildscript {
-	repositories {
-		mavenLocal()
-		maven { url "http://maven.zhenguanyu.com/content/repositories/releases" }
-		maven { url "http://maven.zhenguanyu.com/content/repositories/snapshots" }
-		google()
-		jcenter()
-	}
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.5.0'
-		classpath "com.yuanfudao.android:kuiper-plugin:0.1.11"
-	}
+    repositories {
+        mavenLocal()
+        maven { url "https://maven.zhenguanyu.com/content/repositories/releases" }
+        maven { url "https://maven.zhenguanyu.com/content/repositories/snapshots" }
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath "com.yuanfudao.android:kuiper-plugin:0.1.11"
+    }
 }
 
 allprojects {
-	repositories {
-		google()
-		jcenter()
-	}
+    repositories {
+        google()
+        jcenter()
+    }
 }
 
-kuiper_publish {
-	groupId = "com.yuanfudao.android"
-	artifactId = "megrez-mupdf-android-fitz"
-	version = "1.0.0"
-}
 
 android {
-	compileSdkVersion 28
+    compileSdkVersion 28
 
-	defaultConfig {
-		minSdkVersion 16
-		targetSdkVersion 28
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
 
-		externalNativeBuild.ndkBuild.arguments '-j4'
+        externalNativeBuild.ndkBuild.arguments '-j4'
 
-		// Set ABI_FILTERS in your gradle.properties mfile
-		if (project.hasProperty('ABI_FILTERS')) {
-			ndk.abiFilters = []
-			ndk.abiFilters.addAll(ABI_FILTERS.split(',').collect{it as String})
-		}
-	}
+        // Set ABI_FILTERS in your gradle.properties mfile
+        if (project.hasProperty('ABI_FILTERS')) {
+            ndk.abiFilters = []
+            ndk.abiFilters.addAll(ABI_FILTERS.split(',').collect { it as String })
+        }
+    }
 
-	sourceSets {
-		main {
-			manifest.srcFile 'AndroidManifest.xml'
-			java.srcDirs 'libmupdf/platform/java/src'
-		}
-	}
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs 'libmupdf/platform/java/src'
+        }
+    }
 
-	externalNativeBuild {
-		ndkBuild.path 'libmupdf/platform/java/Android.mk'
-	}
+    externalNativeBuild {
+        ndkBuild.path 'libmupdf/platform/java/Android.mk'
+    }
 }
