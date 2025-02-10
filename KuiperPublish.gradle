@@ -1,7 +1,0 @@
-apply plugin: 'KuiperPublish'
-
-kuiper_publish {
-    groupId = "com.yuanfudao.android"
-    artifactId = "megrez-mupdf-android-fitz"
-    version = "1.0.1"
-}
