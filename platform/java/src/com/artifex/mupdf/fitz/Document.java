@@ -218,7 +218,22 @@ public class Document
 	public native String getMetaData(String key);
 	public native void setMetaData(String key, String value);
 	public native boolean isReflowable();
-	public native void layout(float width, float height, float em);
+
+	public void layout(float width, float height, float em, LayoutMode layoutMode) {
+		layout(width, height, em, layoutMode.ordinal());
+	}
+
+	/**
+	 * 可重排文档（EPUB、FB2或XHTML）以适合指定的页面和字体大小。
+	 *
+	 * @param width
+	 * @param height
+	 * @param em
+	 * @param layoutMode 重排模式, epub 大图会有空白页的情况,此参数已修复该问题
+	 *                   0: 原始库逻辑, 会有空白页case
+	 *                   1: 修复空白页case
+	 */
+	public native void layout(float width, float height, float em, int layoutMode);
 
 	public native Location findBookmark(long mark);
 	public native long makeBookmark(int chapter, int page);

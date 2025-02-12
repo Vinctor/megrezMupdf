@@ -38,6 +38,13 @@ typedef struct fz_document_handler fz_document_handler;
 typedef struct fz_page fz_page;
 typedef intptr_t fz_bookmark;
 
+typedef enum {
+	// 0: original layout, 原始布局方式,有可能有空白页问题
+	ORIGINAL,
+	// 1: 修复空白页问题
+	BLANK_PAGE_ISSUE_FIXED
+} layout_mode;
+
 typedef enum
 {
 	FZ_MEDIA_BOX,
@@ -162,8 +169,10 @@ typedef fz_outline_iterator *(fz_document_outline_iterator_fn)(fz_context *ctx, 
 /**
 	Type for a function to be called to lay
 	out a document. See fz_layout_document for more information.
+	@param layout_mode  fix blank page for epub, 0: original, 1: blank page issue fixed
+			@see [html-layout#layout_flow] & [html-layout#fz_layout_html]
 */
-typedef void (fz_document_layout_fn)(fz_context *ctx, fz_document *doc, float w, float h, float em);
+typedef void (fz_document_layout_fn)(fz_context *ctx, fz_document *doc, float w, float h, float em,layout_mode lm);
 
 /**
 	Type for a function to be called to
@@ -658,7 +667,8 @@ int fz_is_document_reflowable(fz_context *ctx, fz_document *doc);
 	w, h: Page size in points.
 	em: Default font size in points.
 */
-void fz_layout_document(fz_context *ctx, fz_document *doc, float w, float h, float em);
+void
+fz_layout_document(fz_context *ctx, fz_document *doc, float w, float h, float em, layout_mode lm);
 
 /**
 	Create a bookmark for the given page, which can be used to find

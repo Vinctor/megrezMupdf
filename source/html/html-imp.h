@@ -543,7 +543,7 @@ void fz_drop_html_font_set(fz_context *ctx, fz_html_font_set *htx);
 
 void fz_add_css_font_faces(fz_context *ctx, fz_html_font_set *set, fz_archive *dir, const char *base_uri, fz_css *css);
 
-void fz_layout_html(fz_context *ctx, fz_html *html, float w, float h, float em);
+void fz_layout_html(fz_context *ctx, fz_html *html, float w, float h, float em, layout_mode lm);
 void fz_draw_html(fz_context *ctx, fz_device *dev, fz_matrix ctm, fz_html *html, int page);
 fz_outline *fz_load_html_outline(fz_context *ctx, fz_html *node);
 
@@ -559,7 +559,7 @@ fz_html *fz_store_html(fz_context *ctx, fz_html *html, void *doc, int chapter);
 fz_html *fz_find_html(fz_context *ctx, void *doc, int chapter);
 void fz_purge_stored_html(fz_context *ctx, void *doc);
 
-void fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, float start_y, float page_w, float page_h, float em, fz_html_restarter *restart);
+void fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, float start_y, float page_w, float page_h, float em, fz_html_restarter *restart, layout_mode lm);
 
 fz_html_flow *fz_html_split_flow(fz_context *ctx, fz_pool *pool, fz_html_flow *flow, size_t offset);
 

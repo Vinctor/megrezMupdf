@@ -1427,7 +1427,7 @@ JNIEXPORT jboolean JNICALL Java_com_artifex_mupdf_fitz_Document_isReflowable
  * Signature: (FFF)V
  */
 JNIEXPORT void JNICALL Java_com_artifex_mupdf_fitz_Document_layout
-  (JNIEnv *, jobject, jfloat, jfloat, jfloat);
+  (JNIEnv *, jobject, jfloat, jfloat, jfloat, jint);
 
 /*
  * Class:     com_artifex_mupdf_fitz_Document

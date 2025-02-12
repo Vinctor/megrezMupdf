@@ -97,11 +97,11 @@ htdoc_update_outline(fz_context *ctx, fz_document *doc, fz_outline *node)
 }
 
 static void
-htdoc_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em)
+htdoc_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em, layout_mode lm)
 {
 	html_document *doc = (html_document*)doc_;
 
-	fz_layout_html(ctx, doc->html, w, h, em);
+	fz_layout_html(ctx, doc->html, w, h, em, lm);
 
 	htdoc_update_outline(ctx, doc_, doc->outline);
 }
@@ -220,6 +220,7 @@ fz_htdoc_open_document_with_buffer(fz_context *ctx, fz_archive *dir, fz_buffer *
 	fz_var(doc);
 	fz_var(dir);
 
+	// __android_log_print(ANDROID_LOG_INFO, "LayoutMode", "htdoc_layout");
 	fz_try(ctx)
 	{
 		doc = fz_new_derived_document(ctx, html_document);

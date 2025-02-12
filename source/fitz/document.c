@@ -636,7 +636,7 @@ fz_ensure_layout(fz_context *ctx, fz_document *doc)
 {
 	if (doc && doc->layout && !doc->did_layout)
 	{
-		doc->layout(ctx, doc, DEFW, DEFH, DEFEM);
+		doc->layout(ctx, doc, DEFW, DEFH, DEFEM, ORIGINAL);
 		doc->did_layout = 1;
 	}
 }
@@ -737,11 +737,11 @@ fz_resolve_link(fz_context *ctx, fz_document *doc, const char *uri, float *xp, f
 }
 
 void
-fz_layout_document(fz_context *ctx, fz_document *doc, float w, float h, float em)
+fz_layout_document(fz_context *ctx, fz_document *doc, float w, float h, float em, layout_mode lm)
 {
 	if (doc && doc->layout)
 	{
-		doc->layout(ctx, doc, w, h, em);
+		doc->layout(ctx, doc, w, h, em, lm);
 		doc->did_layout = 1;
 	}
 }

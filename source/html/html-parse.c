@@ -2338,7 +2338,8 @@ int fz_place_story_flags(fz_context *ctx, fz_story *story, fz_rect where, fz_rec
 	story->restart_draw.reason = FZ_HTML_RESTART_REASON_NONE;
 	story->restart_draw.flags = flags;
 	story->bbox = where;
-	fz_restartable_layout_html(ctx, &story->tree, where.x0, where.y0, w, h, story->em, &story->restart_draw);
+	// story不用, layout_mode默认暂时传0
+	fz_restartable_layout_html(ctx, &story->tree, where.x0, where.y0, w, h, story->em, &story->restart_draw,0);
 	story->restart_draw.start = story->restart_place.start;
 	story->restart_draw.start_flow = story->restart_place.start_flow;
 

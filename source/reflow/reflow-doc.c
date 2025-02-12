@@ -230,7 +230,7 @@ static void *reflow_layout_page(fz_context *ctx, fz_page *page_, void *state)
 	return NULL;
 }
 
-static void reflow_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em)
+static void reflow_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em, layou_mode lm)
 {
 	reflow_document *doc = (reflow_document*)doc_;
 	if (doc->w == w && doc->h == h && doc->em == em)

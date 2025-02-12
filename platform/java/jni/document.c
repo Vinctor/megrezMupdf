@@ -777,15 +777,22 @@ FUN(Document_isReflowable)(JNIEnv *env, jobject self)
 }
 
 JNIEXPORT void JNICALL
-FUN(Document_layout)(JNIEnv *env, jobject self, jfloat w, jfloat h, jfloat em)
+FUN(Document_layout)(JNIEnv *env, jobject self, jfloat w, jfloat h, jfloat em,jint j_layout_mode)
 {
 	fz_context *ctx = get_context(env);
 	fz_document *doc = from_Document(env, self);
 
 	if (!ctx || !doc) return;
 
-	fz_try(ctx)
-		fz_layout_document(ctx, doc, w, h, em);
+	// parse layout mode
+	layout_mode lm;
+	if (j_layout_mode == 1) {
+		lm = BLANK_PAGE_ISSUE_FIXED;
+	} else {
+		lm = ORIGINAL;
+	}
+
+	fz_try(ctx) fz_layout_document(ctx, doc, w, h, em, lm);
 	fz_catch(ctx)
 		jni_rethrow_void(env, ctx);
 }

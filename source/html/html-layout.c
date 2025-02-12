@@ -522,6 +522,7 @@ typedef struct
 	fz_pool *pool;
 	float page_top;
 	float page_h;
+	layout_mode lm;
 	hb_buffer_t *hb_buf;
 	fz_html_restarter *restart;
 } layout_data;
@@ -721,6 +722,14 @@ static void layout_flow(fz_context *ctx, layout_data *ld, fz_html_box *box, fz_h
 
 			max_w = top->s.layout.w;
 			max_h = ld->page_h;
+
+			// __android_log_print(ANDROID_LOG_INFO, "LayoutMode", "layout_flow:%d",ld->lm);
+			if (ld->lm == BLANK_PAGE_ISSUE_FIXED) {
+				for (fz_html_box *p = top->up; p; p = p->up) {
+					max_h -= p->u.block.margin[T];
+					max_h -= p->u.block.margin[B];
+				}
+			}
 
 			/* NOTE: We ignore the image DPI here, since most images in EPUB files have bogus values. */
 			node->w = node->content.image->w * 72.0f / 96.0f;
@@ -1691,7 +1700,7 @@ static void layout_collapse_margins(fz_context *ctx, fz_html_box *box, fz_html_b
 }
 
 void
-fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, float start_y, float page_w, float page_h, float em, fz_html_restarter *restart)
+fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, float start_y, float page_w, float page_h, float em, fz_html_restarter *restart, layout_mode lm)
 {
 	int unlocked = 0;
 	layout_data ld = { 0 };
@@ -1727,6 +1736,7 @@ fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, f
 		ld.page_h = page_h;
 		ld.page_top = start_y;
 		ld.pool = tree->pool;
+		ld.lm = lm;
 		if (restart)
 			restart->potential = NULL;
 
@@ -1762,7 +1772,7 @@ fz_restartable_layout_html(fz_context *ctx, fz_html_tree *tree, float start_x, f
 }
 
 void
-fz_layout_html(fz_context *ctx, fz_html *html, float w, float h, float em)
+fz_layout_html(fz_context *ctx, fz_html *html, float w, float h, float em, layout_mode lm)
 {
 	/* If we're already laid out to the specifications we need,
 	 * nothing to do. */
@@ -1789,7 +1799,13 @@ fz_layout_html(fz_context *ctx, fz_html *html, float w, float h, float em)
 		html->page_h = 0;
 	}
 
-	fz_restartable_layout_html(ctx, &html->tree, 0, 0, html->page_w, html->page_h, em, NULL);
+	fz_restartable_layout_html(ctx, &html->tree, 0, 0, html->page_w, html->page_h, em, NULL, lm);
+
+	// __android_log_print(ANDROID_LOG_INFO, "LayoutMode", "fz_layout_html:%d", lm);
+	// find "html" box and reduce root laybout bottom with bottom maigin
+	if (lm == BLANK_PAGE_ISSUE_FIXED) {
+		html->tree.root->s.layout.b -= html->tree.root->down->u.block.margin[B];
+	}
 
 	if (h == 0)
 		html->page_h = html->tree.root->s.layout.b;

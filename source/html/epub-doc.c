@@ -55,6 +55,7 @@ typedef struct
 	fz_outline *outline;
 	char *dc_title, *dc_creator;
 	float layout_w, layout_h, layout_em;
+	layout_mode lm;
 	epub_accelerator *accel;
 	uint32_t css_sum;
 
@@ -250,7 +251,7 @@ epub_resolve_link(fz_context *ctx, fz_document *doc_, const char *dest)
 }
 
 static void
-epub_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em)
+epub_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em, layout_mode lm)
 {
 	epub_document *doc = (epub_document*)doc_;
 	uint32_t css_sum = user_css_sum(ctx);
@@ -261,6 +262,8 @@ epub_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em)
 	doc->layout_w = w;
 	doc->layout_h = h;
 	doc->layout_em = em;
+	doc->lm = lm;
+
 
 	if (doc->accel == NULL)
 		return;
@@ -498,7 +501,7 @@ epub_get_laid_out_html(fz_context *ctx, epub_document *doc, epub_chapter *ch)
 	fz_html *html = epub_parse_chapter(ctx, doc, ch);
 	fz_try(ctx)
 	{
-		fz_layout_html(ctx, html, doc->layout_w, doc->layout_h, doc->layout_em);
+		fz_layout_html(ctx, html, doc->layout_w, doc->layout_h, doc->layout_em, doc->lm);
 		accelerate_chapter(ctx, doc, ch, html);
 	}
 	fz_catch(ctx)
