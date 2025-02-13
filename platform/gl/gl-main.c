@@ -1257,7 +1257,7 @@ static void relayout(void)
 	if (fz_is_document_reflowable(ctx, doc))
 	{
 		fz_bookmark mark = fz_make_bookmark(ctx, doc, currentpage);
-		fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+		fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 		currentpage = fz_lookup_bookmark(ctx, doc, mark);
 		history_count = 0;
 		future_count = 0;
@@ -1851,7 +1851,7 @@ static void load_document(void)
 		}
 	}
 
-	fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+	fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 
 	fz_try(ctx)
 		outline = fz_load_outline(ctx, doc);
@@ -1933,7 +1933,7 @@ static void reflow_document(void)
 	pdf = NULL;
 	page = NULL;
 
-	fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+	fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 
 	fz_try(ctx)
 		outline = fz_load_outline(ctx, doc);

@@ -39,6 +39,7 @@ typedef struct
 	float w;
 	float h;
 	float em;
+	layout_mode lm;
 } reflow_document;
 
 typedef struct {
@@ -197,7 +198,7 @@ reflow_load_page(fz_context *ctx, fz_document *doc_, int chapter, int pagenum)
 
 		stm = fz_open_buffer(ctx, buf);
 		page->html_doc = fz_open_document_with_stream(ctx, "application/xhtml+xml", stm);
-		fz_layout_document(ctx, page->html_doc, doc->w, 0, doc->em);
+		fz_layout_document(ctx, page->html_doc, doc->w, 0, doc->em, doc->lm);
 		page->html_page = fz_load_chapter_page(ctx, page->html_doc, 0, 0);
 	}
 	fz_always(ctx)
@@ -226,11 +227,11 @@ static void *reflow_layout_page(fz_context *ctx, fz_page *page_, void *state)
 {
 	reflow_page *page = (reflow_page *) page_;
 	reflow_document *doc = (reflow_document *) page->base.doc;
-	fz_layout_document(ctx, page->html_doc, doc->w, 0, doc->em);
+	fz_layout_document(ctx, page->html_doc, doc->w, 0, doc->em, doc->lm);
 	return NULL;
 }
 
-static void reflow_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em, layou_mode lm)
+static void reflow_layout(fz_context *ctx, fz_document *doc_, float w, float h, float em, layout_mode lm)
 {
 	reflow_document *doc = (reflow_document*)doc_;
 	if (doc->w == w && doc->h == h && doc->em == em)
@@ -238,6 +239,7 @@ static void reflow_layout(fz_context *ctx, fz_document *doc_, float w, float h, 
 	doc->w = w;
 	doc->h = h;
 	doc->em = em;
+	doc->lm = lm;
 
 	(void) fz_process_opened_pages(ctx, (fz_document *) doc, reflow_layout_page, NULL);
 }
@@ -266,6 +268,7 @@ fz_open_reflowed_document(fz_context *ctx, fz_document *underdoc, const fz_stext
 	doc->w = DEF_WIDTH;
 	doc->h = DEF_HEIGHT;
 	doc->em = DEF_FONTSIZE;
+	doc->lm = ORIGINAL;
 
 	return &doc->base;
 }

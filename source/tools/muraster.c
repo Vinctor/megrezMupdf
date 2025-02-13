@@ -1701,7 +1701,7 @@ int main(int argc, char **argv)
 						fz_throw(ctx, FZ_ERROR_ARGUMENT, "cannot authenticate password: %s", filename);
 				}
 
-				fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+				fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 
 				if (fz_optind == argc || !fz_is_page_range(ctx, argv[fz_optind]))
 					drawrange(ctx, doc, "1-N");

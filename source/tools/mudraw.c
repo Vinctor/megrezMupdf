@@ -2625,7 +2625,7 @@ int mudraw_main(int argc, char **argv)
 					}
 
 					layouttime = gettime();
-					fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+					fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 					(void) fz_count_pages(ctx, doc);
 					layouttime = gettime() - layouttime;
 

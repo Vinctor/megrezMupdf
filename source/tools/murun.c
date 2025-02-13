@@ -3741,7 +3741,7 @@ static void ffi_Document_layout(js_State *J)
 	float em = js_tonumber(J, 3);
 
 	fz_try(ctx)
-		fz_layout_document(ctx, doc, w, h, em);
+		fz_layout_document(ctx, doc, w, h, em, ORIGINAL);
 	fz_catch(ctx)
 		rethrow(J);
 }

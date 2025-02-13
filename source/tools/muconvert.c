@@ -215,7 +215,7 @@ int muconvert_main(int argc, char **argv)
 			if (fz_needs_password(ctx, doc))
 				if (!fz_authenticate_password(ctx, doc, password))
 					fz_throw(ctx, FZ_ERROR_ARGUMENT, "cannot authenticate password: %s", argv[i]);
-			fz_layout_document(ctx, doc, layout_w, layout_h, layout_em);
+			fz_layout_document(ctx, doc, layout_w, layout_h, layout_em, ORIGINAL);
 			count = fz_count_pages(ctx, doc);
 
 			if (i+1 < argc && fz_is_page_range(ctx, argv[i+1]))
