@@ -85,6 +85,7 @@ struct pdfapp_s
 	float layout_w;
 	float layout_h;
 	float layout_em;
+	int layout_mode;
 	char *layout_css;
 	int layout_use_doc_css;
 

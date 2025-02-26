@@ -271,6 +271,7 @@ void pdfapp_init(fz_context *ctx, pdfapp_t *app)
 	app->layout_w = FZ_DEFAULT_LAYOUT_W;
 	app->layout_h = FZ_DEFAULT_LAYOUT_H;
 	app->layout_em = FZ_DEFAULT_LAYOUT_EM;
+	app->layout_mode = 0;
 	app->layout_css = NULL;
 	app->layout_use_doc_css = 1;
 
@@ -566,7 +567,7 @@ void pdfapp_open_progressive(pdfapp_t *app, char *filename, int reload, int kbps
 		app->docpath = fz_strdup(ctx, filename);
 		app->doctitle = fz_strdup(ctx, fz_basename(filename));
 
-		fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em);
+		fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em, app->layout_mode);
 
 		while (1)
 		{
@@ -1432,7 +1433,7 @@ key_rewritten:
 		{
 			fz_bookmark mark = fz_make_bookmark(app->ctx, app->doc, fz_location_from_page_number(app->ctx, app->doc, app->pageno));
 			app->layout_em -= 1;
-			fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em);
+			fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em, app->layout_mode);
 			app->pagecount = fz_count_pages(app->ctx, app->doc);
 			app->pageno = fz_page_number_from_location(app->ctx, app->doc, fz_lookup_bookmark(app->ctx, app->doc, mark));
 			pdfapp_showpage(app, 1, 1, 1, 0, 0);
@@ -1443,7 +1444,7 @@ key_rewritten:
 		{
 			fz_bookmark mark = fz_make_bookmark(app->ctx, app->doc, fz_location_from_page_number(app->ctx, app->doc, app->pageno));
 			app->layout_em += 1;
-			fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em);
+			fz_layout_document(app->ctx, app->doc, app->layout_w, app->layout_h, app->layout_em, app->layout_mode);
 			app->pagecount = fz_count_pages(app->ctx, app->doc);
 			app->pageno = fz_page_number_from_location(app->ctx, app->doc, fz_lookup_bookmark(app->ctx, app->doc, mark));
 			pdfapp_showpage(app, 1, 1, 1, 0, 0);

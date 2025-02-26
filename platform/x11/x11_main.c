@@ -908,7 +908,7 @@ int main(int argc, char **argv)
 
 	pdfapp_init(ctx, &gapp);
 
-	while ((c = fz_getopt(argc, argv, "Ip:r:A:C:W:H:S:U:Xb:c:")) != -1)
+	while ((c = fz_getopt(argc, argv, "Ip:r:A:C:W:H::M:S:U:Xb:c:")) != -1)
 	{
 		switch (c)
 		{
@@ -925,6 +925,7 @@ int main(int argc, char **argv)
 		case 'W': gapp.layout_w = fz_atof(fz_optarg); break;
 		case 'H': gapp.layout_h = fz_atof(fz_optarg); break;
 		case 'S': gapp.layout_em = fz_atof(fz_optarg); break;
+		case 'M': gapp.layout_mode = atoi(fz_optarg); break;
 		case 'U': gapp.layout_css = fz_optarg; break;
 		case 'X': gapp.layout_use_doc_css = 0; break;
 		case 'b': kbps = fz_atoi(fz_optarg); break;
